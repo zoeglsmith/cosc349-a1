@@ -5,13 +5,17 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [newToDo, setNewTodo] = useState("");
 
-
   //Function to add a to do to the page
   const handleAddTodo = () => {
     if (newToDo.trim() !== "") {
       setTodos([...todos, { id: Date.now(), text: newToDo }]);
       setNewTodo("");
     }
+  };
+
+  const handleDeleteToDo = (id) => {
+    const tempData = todos.filter((item) => item.id !== id);
+    setTodos(tempData);
   };
 
   return (
