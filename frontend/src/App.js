@@ -5,7 +5,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [newToDo, setNewTodo] = useState("");
 
-  //Function to add a to do to the page
+  // Function to add a to do to the page
   const handleAddTodo = () => {
     if (newToDo.trim() !== "") {
       setTodos([...todos, { id: Date.now(), text: newToDo }]);
@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <h1>Todo List</h1>
-      <div>
+      <div className="input-container">
         <input
           type="text"
           value={newToDo}
@@ -31,7 +31,15 @@ function App() {
       </div>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.text}</li>
+          <li key={todo.id}>
+            {todo.text}
+            <button
+              className="delete-button"
+              onClick={() => handleDeleteToDo(todo.id)}
+            >
+              Delete
+            </button>
+          </li>
         ))}
       </ul>
     </div>
