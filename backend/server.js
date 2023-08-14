@@ -8,12 +8,11 @@ app.use(express.json());
 let todos = [];
 let nextId = 1;
 
-//
-app.get("/api/todo", (req, res) => {
+app.get("/api/todos", (req, res) => {
   res.json(todos);
 });
 
-app.post("/api/todo", (req, res) => {
+app.post("/api/todos", (req, res) => {
   const { text } = req.body;
   const newTodo = {
     id: nextId++,
@@ -23,7 +22,7 @@ app.post("/api/todo", (req, res) => {
   res.json(newTodo);
 });
 
-const port = 5000;
+const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
