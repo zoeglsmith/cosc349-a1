@@ -77,3 +77,14 @@ li:hover {
 .delete-button:hover {
   color: #cc0000;
 }
+
+/* Editlete Button */
+.edit-button {
+  color: #74cc00;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.edit-button:hover {
+  color: #74cc00;
+}

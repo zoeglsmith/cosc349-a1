@@ -4,6 +4,7 @@ import React, { useState } from "react";
 function App() {
   const [todos, setTodos] = useState([]);
   const [newToDo, setNewTodo] = useState("");
+  const [editing, setEditing] = useState(false);
 
   // Function to add a to do to the page
   const handleAddTodo = () => {
@@ -13,14 +14,19 @@ function App() {
     }
   };
 
+  //Functiont to do delete a task
   const handleDeleteToDo = (id) => {
     const tempData = todos.filter((item) => item.id !== id);
     setTodos(tempData);
   };
 
+  const handleEditToDo = (id) => {
+    setEditing(true);
+  };
+
   return (
     <div className="App">
-      <h1>Todo List</h1>
+      <h1>To Do List</h1>
       <div className="input-container">
         <input
           type="text"
@@ -38,6 +44,12 @@ function App() {
               onClick={() => handleDeleteToDo(todo.id)}
             >
               Delete
+            </button>
+            <button
+              className="edit-button"
+              onClick={() => handleEditToDo(todo.id)}
+            >
+              Edit
             </button>
           </li>
         ))}
