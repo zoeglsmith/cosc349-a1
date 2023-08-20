@@ -1,28 +1,98 @@
 const express = require("express");
 const cors = require("cors");
-const app = express();
+const { MongoClient, ObjectId } = require("mongodb");
+require("dotenv").config();
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-let todos = [];
-let nextId = 1;
-
-app.get("/api/todos", (req, res) => {
-  res.json(todos);
+const mongoURI = process.env.MONGODB_URI;
+const client = new MongoClient(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-app.post("/api/todos", (req, res) => {
+let todosCollection;
+
+(async () => {
+  try {
+    await client.connect();
+    todosCollection = client.db("todoapp").collection("todos");
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  }
+})();
+
+// Get all todos
+app.get("/api/todos", async (req, res) => {
+  try {
+    const todos = await todosCollection.find({}).toArray();
+    res.json(todos);
+  } catch (error) {
+    console.error("Error retrieving todos:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Create a new todo
+app.post("/api/todos", async (req, res) => {
   const { text } = req.body;
   const newTodo = {
-    id: nextId++,
     text,
   };
-  todos.push(newTodo);
-  res.json(newTodo);
+
+  try {
+    const result = await todosCollection.insertOne(newTodo);
+    newTodo._id = result.insertedId;
+    res.json(newTodo);
+  } catch (error) {
+    console.error("Error creating new todo:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
-const port = 3000;
+// Update a todo
+app.put("/api/todos/:id", async (req, res) => {
+  const { id } = req.params;
+  const { text } = req.body;
+
+  try {
+    const result = await todosCollection.updateOne(
+      { _id: ObjectId(id) },
+      { $set: { text } }
+    );
+
+    if (result.modifiedCount === 1) {
+      res.json({ message: "Todo updated successfully" });
+    } else {
+      res.status(404).json({ error: "Todo not found" });
+    }
+  } catch (error) {
+    console.error("Error updating todo:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Delete a todo
+app.delete("/api/todos/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await todosCollection.deleteOne({ _id: ObjectId(id) });
+
+    if (result.deletedCount === 1) {
+      res.json({ message: "Todo deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Todo not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting todo:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+const port = process.env.PORT_BACKEND || 3002;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
