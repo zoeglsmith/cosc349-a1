@@ -4,8 +4,15 @@ const { MongoClient, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+
+const corsOptions = {
+  origin: "http://localhost:3000", // Update with your frontend's URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
 
 const mongoURI = process.env.MONGODB_URI;
 const client = new MongoClient(mongoURI, {
@@ -25,7 +32,6 @@ let todosCollection;
   }
 })();
 
-// Get all todos
 app.get("/api/todos", async (req, res) => {
   try {
     const todos = await todosCollection.find({}).toArray();
@@ -36,7 +42,6 @@ app.get("/api/todos", async (req, res) => {
   }
 });
 
-// Create a new todo
 app.post("/api/todos", async (req, res) => {
   const { text } = req.body;
   const newTodo = {
@@ -53,7 +58,6 @@ app.post("/api/todos", async (req, res) => {
   }
 });
 
-// Update a todo
 app.put("/api/todos/:id", async (req, res) => {
   const { id } = req.params;
   const { text } = req.body;
@@ -75,7 +79,6 @@ app.put("/api/todos/:id", async (req, res) => {
   }
 });
 
-// Delete a todo
 app.delete("/api/todos/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -92,6 +95,7 @@ app.delete("/api/todos/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 const port = process.env.PORT_BACKEND || 3002;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

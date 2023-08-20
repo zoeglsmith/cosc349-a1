@@ -9,26 +9,10 @@ function App() {
   const [editing, setEditing] = useState(false);
   const [editedText, setEditedText] = useState("");
 
-  const fetchTodos = async () => {
-    try {
-      const response = await fetch("/api/todos");
-      if (response.ok) {
-        const data = await response.json();
-        setTodos(data);
-      }
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
   const handleAddTodo = async () => {
     if (newTodo.trim() !== "") {
       try {
-        const response = await fetch("/api/todos", {
+        const response = await fetch("http://localhost:3002/api/todos", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -52,7 +36,7 @@ function App() {
 
   const handleDeleteToDo = async (id) => {
     try {
-      const response = await fetch(`/api/todos/${id}`, {
+      const response = await fetch(`http://localhost:3002/api/todos/${id}`, {
         method: "DELETE",
       });
 
@@ -75,7 +59,7 @@ function App() {
   const handleSaveEdit = async (id) => {
     if (editedText.trim() !== "") {
       try {
-        const response = await fetch(`/api/todos/${id}`, {
+        const response = await fetch(`http://localhost:3002/api/todos/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
