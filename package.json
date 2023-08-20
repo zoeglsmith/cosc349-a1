@@ -1,0 +1,13 @@
+{
+  "name": "cosc349-a1",
+  "version": "1.0.0",
+  "description": "COSC349 Assignment 1",
+  "scripts": {
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && node server.js",
+    "start:frontend": "cd frontend && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0"
+  }
+}
