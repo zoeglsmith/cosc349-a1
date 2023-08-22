@@ -23,6 +23,16 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 6AVA9RtZD9F3gfTv
     ports:
       - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backup:
+    image: mongo:latest
+    depends_on:
+      - db
+    volumes:
+      - mongodb_backup:/backup
+    command: ["sh", "-c", "while :; do sleep 24h && /backup.sh; done"]
 
   redis:
     image: redis:latest
@@ -35,3 +45,7 @@ services:
       - "8080:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+
+volumes:
+  mongodb_data:
+  mongodb_backup:
