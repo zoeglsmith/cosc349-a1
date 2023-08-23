@@ -31,7 +31,8 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - cosc349-a1/nginx.conf:/etc/nginx/nginx.conf
+      - nginx_config:/etc/nginx/nginx.conf
 
 volumes:
   mongodb_data:
+  nginx_config:
