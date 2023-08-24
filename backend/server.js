@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const Todo = require('./schema.js'); // Update the path accordingly
-
 const { MongoClient, ObjectId } = require("mongodb");
 require("dotenv").config();
 
@@ -9,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: "http://localhost:80", 
+  origin: "http://localhost:80",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
@@ -45,9 +43,10 @@ app.get("/api/todos", async (req, res) => {
 });
 
 app.post("/api/todos", async (req, res) => {
-  const { text } = req.body;
+  const { text, completed } = req.body;
   const newTodo = {
     text,
+    completed,
   };
 
   try {
@@ -62,12 +61,12 @@ app.post("/api/todos", async (req, res) => {
 
 app.put("/api/todos/:id", async (req, res) => {
   const { id } = req.params;
-  const { text } = req.body;
+  const { text, completed } = req.body;
 
   try {
     const result = await todosCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: { text } }
+      { $set: { text, completed } }
     );
 
     if (result.matchedCount === 1) {
@@ -100,13 +99,6 @@ app.delete('/api/todos/:id', async (req, res) => {
   }
 });
 
-
-app.get('*', (req, res) => {
-  res.status(404);
-  res.send("<h1>Backend: not found</h1>");
-});
-
-const port = process.env.PORT_BACKEND || 5000;
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(5000, () => {
+  console.log("Server is running on http://localhost:5000");
 });
