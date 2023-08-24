@@ -15,7 +15,8 @@ services:
       - "5000:5000"
     environment:
       # MONGODB_URI: ${MONGODB_URI}
-      MONGODB_URI: mongodb://admin:6AVA9RtZD9F3gfTv@localhost:27017
+      MONGODB_URI: "mongodb+srv://admin:6AVA9RtZD9F3gfTv@cluster0.myynpss.mongodb.net/?retryWrites=true&w=majority"
+
 
   db:
     image: mongo:latest
@@ -30,7 +31,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "8080:80"
+      - "80:8080"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 

@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const Todo = require('./schema.js'); // Update the path accordingly
+
 const { MongoClient, ObjectId } = require("mongodb");
 require("dotenv").config();
 
@@ -7,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: "http://localhost:3000", // Update with your frontend's URL
+  origin: "http://localhost:80", 
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
@@ -64,11 +66,11 @@ app.put("/api/todos/:id", async (req, res) => {
 
   try {
     const result = await todosCollection.updateOne(
-      { _id: ObjectId(id) },
+      { _id: new ObjectId(id) },
       { $set: { text } }
     );
 
-    if (result.modifiedCount === 1) {
+    if (result.matchedCount === 1) {
       res.json({ message: "Todo updated successfully" });
     } else {
       res.status(404).json({ error: "Todo not found" });
@@ -79,24 +81,32 @@ app.put("/api/todos/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/todos/:id", async (req, res) => {
-  const { id } = req.params;
+app.delete('/api/todos/:id', async (req, res) => {
+  const todoId = req.params.id;
 
   try {
-    const result = await todosCollection.deleteOne({ _id: ObjectId(id) });
+    console.log("Todo ID to be deleted:", todoId);
+    const deletedTodo = await todosCollection.findOneAndDelete({ _id: new ObjectId(todoId) });
+    console.log("Deleted todo:", deletedTodo);
 
-    if (result.deletedCount === 1) {
-      res.json({ message: "Todo deleted successfully" });
-    } else {
-      res.status(404).json({ error: "Todo not found" });
+    if (!deletedTodo.value) {
+      return res.status(404).json({ message: 'Todo not found' });
     }
+
+    res.status(200).json({ message: 'Todo deleted successfully' });
   } catch (error) {
-    console.error("Error deleting todo:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error deleting todo:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-const port = process.env.PORT_BACKEND || 3002;
+
+app.get('*', (req, res) => {
+  res.status(404);
+  res.send("<h1>Backend: not found</h1>");
+});
+
+const port = process.env.PORT_BACKEND || 5000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

@@ -1,18 +1,34 @@
 import React, { useState, useEffect } from "react";
-// import InfiniteScroll from "react-infinite-scroll-component";
 import "./App.css";
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
   const [newTodo, setNewTodo] = useState("");
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
+
+  const fetchTodos = async () => {
+    try {
+      const response = await fetch("http://localhost:80/api/todos");
+      if (response.ok) {
+        const todosData = await response.json();
+        setTodos(todosData);
+      } else {
+        console.error("Error fetching todos");
+      }
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   const handleAddTodo = async () => {
     if (newTodo.trim() !== "") {
       try {
-        const response = await fetch("http://localhost:3002/api/todos", {
+        const response = await fetch("http://localhost:80/api/todos", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -34,13 +50,15 @@ function App() {
     }
   };
 
-  const handleDeleteToDo = async (id) => {
+  const handleDeleteToDo = async (id, text) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/todos/${id}`, {
+      console.log("Trying to delete todo:", id);
+      const response = await fetch(`http://localhost:80/api/todos/${id}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
+        console.log("Todo deleted successfully:", id, text);
         const updatedTodos = todos.filter((todo) => todo._id !== id);
         setTodos(updatedTodos);
       } else {
@@ -59,7 +77,8 @@ function App() {
   const handleSaveEdit = async (id) => {
     if (editedText.trim() !== "") {
       try {
-        const response = await fetch(`http://localhost:3002/api/todos/${id}`, {
+        console.log("Trying to edit todo:", id);
+        const response = await fetch(`http://localhost:80/api/todos/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -68,6 +87,7 @@ function App() {
         });
 
         if (response.ok) {
+          console.log("Todo edited successfully:", id);
           const updatedTodos = todos.map((todo) =>
             todo._id === id ? { ...todo, text: editedText } : todo
           );
@@ -81,64 +101,51 @@ function App() {
       }
     }
   };
-
-  const fetchMoreData = () => {
-    // Fetch more data or set hasMore to false
-    setHasMore(false);
-  };
-
   return (
     <div className="App">
-      <h1>To Do List</h1>
+      <h1 className="app-heading">To Do List</h1>
       <div className="input-container">
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
+          className="input-field"
         />
-        <button onClick={handleAddTodo}>Add</button>
+        <button onClick={handleAddTodo} className="add-button">Add</button>
       </div>
 
-      {/* Lazy Loading with react-infinite-scroll-component */}
-      {/* <InfiniteScroll
-        dataLength={todos.length}
-        next={fetchMoreData}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-      > */}
-        <ul>
-          {todos.map((todo) => (
-            <li key={todo._id}>
-              {editing === todo._id ? (
-                <>
-                  <input
-                    type="text"
-                    value={editedText}
-                    onChange={(e) => setEditedText(e.target.value)}
-                  />
-                  <button onClick={() => handleSaveEdit(todo._id)}>Save</button>
-                </>
-              ) : (
-                <>
-                  {todo.text}
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteToDo(todo._id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEditToDo(todo._id, todo.text)}
-                  >
-                    Edit
-                  </button>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      {/* </InfiniteScroll> */}
+      <ul className="todo-list">
+        {todos.map((todo) => (
+          <li key={todo._id} className="todo-item">
+            {editing === todo._id ? (
+              <>
+                <input
+                  type="text"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                />
+                <button onClick={() => handleSaveEdit(todo._id)} className="edit-button">Save</button>
+              </>
+            ) : (
+              <>
+                {todo.text}
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteToDo(todo._id, todo.text)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEditToDo(todo._id, todo.text)}
+                >
+                  Edit
+                </button>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

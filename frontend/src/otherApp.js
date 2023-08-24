@@ -10,7 +10,7 @@ function App() {
   }, []);
 
   const fetchTodos = () => {
-    fetch("http://localhost:3000/api/todos")
+    fetch("http://localhost:80/api/todos")
       .then((response) => response.json())
       .then((data) => setTodos(data))
       .catch((error) => console.error("Error fetching todos:", error));
@@ -21,7 +21,7 @@ function App() {
   };
 
   const handleAddTodo = () => {
-    fetch("http://localhost:3000/api/todos", {
+    fetch("http://localhost:80/api/todos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
