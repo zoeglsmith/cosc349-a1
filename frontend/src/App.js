@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+// import InfiniteScroll from "react-infinite-scroll-component";
 import "./App.css";
 
 function App() {
@@ -100,12 +100,12 @@ function App() {
       </div>
 
       {/* Lazy Loading with react-infinite-scroll-component */}
-      <InfiniteScroll
+      {/* <InfiniteScroll
         dataLength={todos.length}
         next={fetchMoreData}
         hasMore={hasMore}
         loader={<h4>Loading...</h4>}
-      >
+      > */}
         <ul>
           {todos.map((todo) => (
             <li key={todo._id}>
@@ -138,7 +138,7 @@ function App() {
             </li>
           ))}
         </ul>
-      </InfiniteScroll>
+      {/* </InfiniteScroll> */}
     </div>
   );
 }
