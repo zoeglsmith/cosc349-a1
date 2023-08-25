@@ -7,12 +7,32 @@ function App() {
   const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
 
+  useEffect(() => {
+    const storedTodos = JSON.parse(localStorage.getItem("todos"));
+    if (storedTodos) {
+      setTodos(storedTodos);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  useEffect(() => {
+    const storedEditedText = localStorage.getItem("editedText");
+    if (storedEditedText) {
+      setEditedText(storedEditedText);
+    }
+  }, []);
+
   const fetchTodos = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/todos");
+      const response = await fetch("http://localhost:80/api/todos");
       if (response.ok) {
         const todosData = await response.json();
         setTodos(todosData);
+        setLoading(false); // Data has arrived, set loading to false
+
       } else {
         console.error("Error fetching todos");
       }
@@ -88,6 +108,7 @@ function App() {
           );
           setTodos(updatedTodos);
           setEditing(null);
+          localStorage.removeItem("editedText"); // Clear edited text from local storage
         } else {
           console.error("Error editing todo");
         }
@@ -99,7 +120,9 @@ function App() {
 
   const handleToggleComplete = async (id, completed) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
+      console.log("Toggling completion for task with ID:", id);
+  
+      const response = await fetch(`http://localhost:80/api/todos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -108,9 +131,13 @@ function App() {
       });
   
       if (response.ok) {
+        console.log("API response for toggling completion:", response);
+  
         const updatedTodos = todos.map((todo) =>
           todo._id === id ? { ...todo, completed } : todo
         );
+        console.log("Updated todos array:", updatedTodos);
+  
         setTodos(updatedTodos);
       } else {
         console.error("Error updating todo status");
@@ -119,6 +146,7 @@ function App() {
       console.error("Error updating todo status:", error);
     }
   };
+  
 
   return (
     <div className="App">

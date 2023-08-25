@@ -64,13 +64,17 @@ app.put("/api/todos/:id", async (req, res) => {
   const { text, completed } = req.body;
 
   try {
+    console.log("Updating task completion for ID:", id);
+
     const result = await todosCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: { text, completed } }
     );
 
     if (result.matchedCount === 1) {
+      console.log("Task updated successfully:", result);
       res.json({ message: "Todo updated successfully" });
+
     } else {
       res.status(404).json({ error: "Todo not found" });
     }
