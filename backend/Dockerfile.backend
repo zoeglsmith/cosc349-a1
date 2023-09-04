@@ -8,6 +8,14 @@ RUN npm install
 
 COPY . .
 
+# Install the MongoDB client
+RUN apk --no-cache add mongodb-tools
+
+# Add a startup script to preload test data and start the server
+COPY preload-data.sh /app/preload-data.sh
+RUN chmod +x /app/preload-data.sh
+
 EXPOSE 5000
 
-CMD ["node", "server.js"]
+# Start the application using the preload script
+CMD ["./preload-data.sh"]

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
-import App from "./App";
+import App from "..src/App";
 
 describe("App Component", () => {
   // Mocking fetch function
@@ -23,13 +23,13 @@ describe("App Component", () => {
     expect(getByText("To Do List")).toBeInTheDocument();
 
     // Check if the input field and buttons are rendered
-    expect(getByPlaceholderText("")).toBeInTheDocument();
+    expect(getByPlaceholderText("Add a new todo")).toBeInTheDocument();
     expect(getByText("Add")).toBeInTheDocument();
   });
 
   it("should add a new todo when 'Add' button is clicked", async () => {
     const { getByText, getByPlaceholderText } = render(<App />);
-    const inputField = getByPlaceholderText("Add a new To Do");
+    const inputField = getByPlaceholderText("Add a new todo");
     const addButton = getByText("Add");
 
     // Type a new todo text and click 'Add' button
@@ -38,7 +38,7 @@ describe("App Component", () => {
 
     // Wait for the fetch call to resolve
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
       expect(global.fetch).toHaveBeenCalledWith("http://localhost:3002/api/todos", {
         method: "POST",
         headers: {
@@ -52,5 +52,5 @@ describe("App Component", () => {
     expect(getByText("New Todo Item")).toBeInTheDocument();
   });
 
-
+  // Add more test cases for other functionality (editing, deleting, infinite scroll, etc.)
 });

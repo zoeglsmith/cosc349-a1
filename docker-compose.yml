@@ -7,17 +7,6 @@ services:
     ports:
       - "3000:80"
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.backend
-    ports:
-      - "5000:5000"
-    environment:
-      # MONGODB_URI: ${MONGODB_URI}
-      MONGODB_URI: "mongodb+srv://admin:6AVA9RtZD9F3gfTv@cluster0.myynpss.mongodb.net/?retryWrites=true&w=majority"
-
-
   db:
     image: mongo:latest
     environment:
@@ -27,6 +16,15 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:5000"
+    environment:
+      MONGODB_URI: "mongodb+srv://admin:6AVA9RtZD9F3gfTv@cluster0.myynpss.mongodb.net/?retryWrites=true&w=majority"
 
   nginx:
     image: nginx:latest

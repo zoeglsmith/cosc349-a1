@@ -156,7 +156,9 @@ function App() {
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
+          placeholder="Add a new To Do"
           className="input-field"
+          id="Add"
         />
         <button onClick={handleAddTodo} className="add-button">
           Add
