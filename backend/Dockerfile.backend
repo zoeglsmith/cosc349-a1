@@ -3,19 +3,15 @@ FROM node:14-alpine
 
 WORKDIR /app
 
+# Copy package.json and package-lock.json separately to take advantage of Docker cache
 COPY package*.json ./
 RUN npm install
 
+# Copy the rest of the application source code
 COPY . .
 
-# Install the MongoDB client
-RUN apk --no-cache add mongodb-tools
-
-# Add a startup script to preload test data and start the server
-COPY preload-data.sh /app/preload-data.sh
-RUN chmod +x /app/preload-data.sh
-
+# Expose port 5000 for the application
 EXPOSE 5000
 
-# Start the application using the preload script
-CMD ["./preload-data.sh"]
+# Start the application using the "start" script defined in package.json
+ CMD ["npm", "server.js"]
