@@ -1,23 +1,27 @@
-# Use the official Node.js image as the base
-FROM node:14-alpine
-
-# Set the working directory inside the container
+# Use a multi-stage build
+# Build stage for ARM
+FROM arm64v8/node:14-alpine AS arm-builder
 WORKDIR /app
-
-# Copy package.json and package-lock.json to the container
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
-
-# Copy the rest of the application files to the container
 COPY . .
-
-# Build the React frontend (ensure that 'npm run build' has been run beforehand)
 RUN npm run build
-
-# Expose port 3000 (if your server listens on this port)
 EXPOSE 3000
+CMD ["node", "server.js"]
 
-# Command to start the application
+# Build stage for Intel
+FROM node:14-alpine AS intel-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["node", "server.js"]
+
+# Final stage
+FROM scratch
+COPY --from=arm-builder /app /app
+COPY --from=intel-builder /app /app
+WORKDIR /app
 CMD ["node", "server.js"]
