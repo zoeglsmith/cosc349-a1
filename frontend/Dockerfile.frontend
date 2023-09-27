@@ -1,27 +1,7 @@
-# Use a multi-stage build
-# Build stage for ARM
-FROM arm64v8/node:14-alpine AS arm-builder
+FROM node:14-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["node", "server.js"]
-
-# Build stage for Intel
-FROM node:14-alpine AS intel-builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["node", "server.js"]
-
-# Final stage
-FROM scratch
-COPY --from=arm-builder /app /app
-COPY --from=intel-builder /app /app
-WORKDIR /app
-CMD ["node", "server.js"]
+EXPOSE 80
+CMD ["npm", "start"]

@@ -7,14 +7,20 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: "http://localhost:80",
+  origin: "*", // Allow requests from any origin (not recommended for production)
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
 
-const mongoURI = process.env.MONGODB_URI;
+const mongoHost = process.env.MONGO_HOST;
+const mongoPort = process.env.MONGO_PORT;
+const mongoDB = process.env.MONGO_DB;
+const mongoUser = process.env.MONGO_USER;
+const mongoPass = process.env.MONGO_PASS;
+
+const mongoURI = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDB}`;
 const client = new MongoClient(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -25,7 +31,7 @@ let todosCollection;
 (async () => {
   try {
     await client.connect();
-    todosCollection = client.db("todoapp").collection("todos");
+    todosCollection = client.db(mongoDB).collection("todos");
     console.log("Connected to MongoDB");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
@@ -74,7 +80,6 @@ app.put("/api/todos/:id", async (req, res) => {
     if (result.matchedCount === 1) {
       console.log("Task updated successfully:", result);
       res.json({ message: "Todo updated successfully" });
-
     } else {
       res.status(404).json({ error: "Todo not found" });
     }
@@ -84,25 +89,28 @@ app.put("/api/todos/:id", async (req, res) => {
   }
 });
 
-app.delete('/api/todos/:id', async (req, res) => {
+app.delete("/api/todos/:id", async (req, res) => {
   const todoId = req.params.id;
 
   try {
     console.log("Todo ID to be deleted:", todoId);
-    const deletedTodo = await todosCollection.findOneAndDelete({ _id: new ObjectId(todoId) });
+    const deletedTodo = await todosCollection.findOneAndDelete({
+      _id: new ObjectId(todoId),
+    });
     console.log("Deleted todo:", deletedTodo);
 
     if (!deletedTodo.value) {
-      return res.status(404).json({ message: 'Todo not found' });
+      return res.status(404).json({ message: "Todo not found" });
     }
 
-    res.status(200).json({ message: 'Todo deleted successfully' });
+    res.status(200).json({ message: "Todo deleted successfully" });
   } catch (error) {
-    console.error('Error deleting todo:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error deleting todo:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server is running on http://localhost:5000");
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });

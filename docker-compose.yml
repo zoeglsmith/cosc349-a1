@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile.frontend
     ports:
       - "3000:80"
+    environment:
+      - DOCKER_BUILDKIT=0  # Disable BuildKit for this service
 
   db:
     image: mongo:latest
@@ -24,7 +26,8 @@ services:
     ports:
       - "5000:5000"
     environment:
-      MONGODB_URI: "mongodb+srv://admin:6AVA9RtZD9F3gfTv@cluster0.myynpss.mongodb.net/?retryWrites=true&w=majority"
+      - DOCKER_BUILDKIT=0  # Disable BuildKit for this service
+      - MONGODB_URI=mongodb+srv://admin:6AVA9RtZD9F3gfTv@cluster0.myynpss.mongodb.net/?retryWrites=true&w=majority
 
   nginx:
     image: nginx:latest
