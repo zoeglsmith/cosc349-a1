@@ -31,8 +31,7 @@ function App() {
       if (response.ok) {
         const todosData = await response.json();
         setTodos(todosData);
-        setLoading(false); // Data has arrived, set loading to false
-
+        // setLoading(false); // Data has arrived, set loading to false
       } else {
         console.error("Error fetching todos");
       }
@@ -121,7 +120,7 @@ function App() {
   const handleToggleComplete = async (id, completed) => {
     try {
       console.log("Toggling completion for task with ID:", id);
-  
+
       const response = await fetch(`http://localhost:80/api/todos/${id}`, {
         method: "PUT",
         headers: {
@@ -129,15 +128,15 @@ function App() {
         },
         body: JSON.stringify({ completed }),
       });
-  
+
       if (response.ok) {
         console.log("API response for toggling completion:", response);
-  
+
         const updatedTodos = todos.map((todo) =>
           todo._id === id ? { ...todo, completed } : todo
         );
         console.log("Updated todos array:", updatedTodos);
-  
+
         setTodos(updatedTodos);
       } else {
         console.error("Error updating todo status");
@@ -146,7 +145,6 @@ function App() {
       console.error("Error updating todo status:", error);
     }
   };
-  
 
   return (
     <div className="App">
@@ -174,9 +172,7 @@ function App() {
             <input
               type="checkbox"
               checked={todo.completed}
-              onChange={() =>
-                handleToggleComplete(todo._id, !todo.completed)
-              }
+              onChange={() => handleToggleComplete(todo._id, !todo.completed)}
             />
             {editing === todo._id ? (
               <>
