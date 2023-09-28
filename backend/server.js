@@ -28,6 +28,7 @@ let todosCollection;
 function corsMiddleware(req, res, next) {
   const allowedOrigins = [
     "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com",
+    "http://ec2-54-165-155-49.compute-1.amazonaws.com",
   ];
 
   const origin = req.headers.origin;

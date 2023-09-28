@@ -6,7 +6,7 @@ function App() {
   const [newTodo, setNewTodo] = useState("");
   const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
-  const apiUrl = "http://localhost:5000";
+  const apiUrl = "http://ec2-54-165-155-49.compute-1.amazonaws.com:5000/api";
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
@@ -29,7 +29,7 @@ function App() {
   const fetchTodos = async () => {
     console.log("Fetching todos...");
     try {
-      const response = await fetch(`${apiUrl}/api/todos`);
+      const response = await fetch(`${apiUrl}/todos`);
       if (response.ok) {
         const todosData = await response.json();
         setTodos(todosData);
@@ -50,7 +50,7 @@ function App() {
     if (newTodo.trim() !== "") {
       try {
         console.log("Adding new todo:", newTodo);
-        const response = await fetch(`${apiUrl}/api/todos`, {
+        const response = await fetch(`${apiUrl}/todos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -74,7 +74,7 @@ function App() {
 
   const handleDeleteToDo = async (id, text) => {
     try {
-      const response = await fetch(`${apiUrl}/api/todos/${id}`, {
+      const response = await fetch(`${apiUrl}/todos/${id}`, {
         method: "DELETE",
       });
 
@@ -97,7 +97,7 @@ function App() {
   const handleSaveEdit = async (id) => {
     if (editedText.trim() !== "") {
       try {
-        const response = await fetch(`${apiUrl}/api/todos/${id}`, {
+        const response = await fetch(`${apiUrl}/todos/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -125,7 +125,7 @@ function App() {
     try {
       console.log("Toggling completion for task with ID:", id);
 
-      const response = await fetch(`${apiUrl}/api/todos/${id}`, {
+      const response = await fetch(`${apiUrl}/todos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
