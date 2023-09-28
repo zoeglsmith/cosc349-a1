@@ -53,7 +53,10 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // Use corsOptions for CORS configuration
+
+// Use corsMiddleware as a middleware for all routes to allow CORS
+app.use(corsMiddleware);
 
 app.get("/api/todos", async (req, res) => {
   console.log("Received GET request to /api/todos");
@@ -67,7 +70,7 @@ app.get("/api/todos", async (req, res) => {
 });
 
 app.post("/api/todos", async (req, res) => {
-  console.log("RECIOEVED POST");
+  console.log("Received POST request to /api/todos");
   const { text, completed } = req.body;
   const newTodo = {
     text,
@@ -133,6 +136,6 @@ const port = process.env.PORT || 5000;
 // app.listen(port, () => {
 //   console.log(`Server is running on http://localhost:${port}`);
 // });
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, "54.208.14.165", () => {
   console.log(`Server is running on http://54.208.14.165:${port}`);
 });
