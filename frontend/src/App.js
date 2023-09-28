@@ -48,7 +48,7 @@ function App() {
   const handleAddTodo = async () => {
     if (newTodo.trim() !== "") {
       try {
-        const response = await fetch(apiUrl, {
+        const response = await fetch(`${apiUrl}/api/todos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
