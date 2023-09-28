@@ -14,13 +14,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-const mongoHost = process.env.MONGO_HOST;
-const mongoPort = process.env.MONGO_PORT;
-const mongoDB = process.env.MONGO_DB;
-const mongoUser = process.env.MONGO_USER;
-const mongoPass = process.env.MONGO_PASS;
-
-const mongoURI = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDB}`;
+const mongoURI = process.env.MONGODB_URI;
 const client = new MongoClient(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -31,7 +25,7 @@ let todosCollection;
 (async () => {
   try {
     await client.connect();
-    todosCollection = client.db(mongoDB).collection("todos");
+    todosCollection = client.db().collection("todos");
     console.log("Connected to MongoDB");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);

@@ -1,7 +1,22 @@
-FROM node:14-alpine
-WORKDIR /app
+FROM node:14
+
+# Install bash
+RUN apt-get update && apt-get install -y bash
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json files
 COPY package*.json ./
+
+# Install Node.js and npm
+RUN apt-get update && apt-get install -y nodejs npm
+
+# Install application dependencies
 RUN npm install
+
+# Copy the rest of the application source code
 COPY . .
-EXPOSE 80
+
+# Start the application
 CMD ["npm", "start"]

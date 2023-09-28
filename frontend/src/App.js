@@ -31,7 +31,6 @@ function App() {
       if (response.ok) {
         const todosData = await response.json();
         setTodos(todosData);
-        // setLoading(false); // Data has arrived, set loading to false
       } else {
         console.error("Error fetching todos");
       }
