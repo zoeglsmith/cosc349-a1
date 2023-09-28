@@ -74,7 +74,7 @@ app.use(cors(corsOptions));
 // });
 
 // Create a test route for POST requests
-app.post("/", (req, res) => {
+app.post("http://cosc349-a1-backend-url/test-post", (req, res) => {
   res.json({ message: "Test POST request successful" });
 });
 
