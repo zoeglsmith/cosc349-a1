@@ -78,23 +78,23 @@ app.post("/test-post", (req, res) => {
   res.json({ message: "Test POST request successful" });
 });
 
-app.post("/api/todos", async (req, res) => {
-  console.log("Received GET request to /api/todos");
-  const { text, completed } = req.body;
-  const newTodo = {
-    text,
-    completed,
-  };
+// app.post("/api/todos", async (req, res) => {
+//   console.log("Received GET request to /api/todos");
+//   const { text, completed } = req.body;
+//   const newTodo = {
+//     text,
+//     completed,
+//   };
 
-  try {
-    const result = await todosCollection.insertOne(newTodo);
-    newTodo._id = result.insertedId;
-    res.json(newTodo);
-  } catch (error) {
-    console.error("Error creating new todo:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//   try {
+//     const result = await todosCollection.insertOne(newTodo);
+//     newTodo._id = result.insertedId;
+//     res.json(newTodo);
+//   } catch (error) {
+//     console.error("Error creating new todo:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 app.put("/api/todos/:id", async (req, res) => {
   const { id } = req.params;
