@@ -27,7 +27,7 @@ let todosCollection;
 // Define a function to check the origin and allow CORS for your frontend S3 bucket
 function corsMiddleware(req, res, next) {
   const allowedOrigins = [
-    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com/api/todos",
+    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com",
   ];
 
   const origin = req.headers.origin;
@@ -52,7 +52,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get("/", async (req, res) => {
+app.get("/api/todos", async (req, res) => {
   try {
     const todos = await todosCollection.find({}).toArray();
     res.json(todos);
@@ -62,7 +62,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.post("/", async (req, res) => {
+app.post("/api/todos", async (req, res) => {
   const { text, completed } = req.body;
   const newTodo = {
     text,
@@ -79,7 +79,7 @@ app.post("/", async (req, res) => {
   }
 });
 
-app.put("/:id", async (req, res) => {
+app.put("/api/todos/:id", async (req, res) => {
   const { id } = req.params;
   const { text, completed } = req.body;
 
@@ -103,7 +103,7 @@ app.put("/:id", async (req, res) => {
   }
 });
 
-app.delete("/:id", async (req, res) => {
+app.delete("/api/todos/:id", async (req, res) => {
   const todoId = req.params.id;
 
   try {
