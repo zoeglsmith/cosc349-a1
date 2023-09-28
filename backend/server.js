@@ -27,7 +27,7 @@ let todosCollection;
 // Define a function to check the origin and allow CORS for your frontend S3 bucket
 function corsMiddleware(req, res, next) {
   const allowedOrigins = [
-    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com",
+    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com/api/todos",
   ];
 
   const origin = req.headers.origin;
