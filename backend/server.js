@@ -6,14 +6,6 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 
-const corsOptions = {
-  origin: "*", // Allow requests from any origin (not recommended for production)
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  optionsSuccessStatus: 204,
-};
-app.use(cors(corsOptions));
-
 const mongoURI = process.env.MONGODB_URI;
 const client = new MongoClient(mongoURI, {
   useNewUrlParser: true,
@@ -31,6 +23,25 @@ let todosCollection;
     console.error("Error connecting to MongoDB:", error);
   }
 })();
+
+// Define a function to check the origin and allow CORS for your frontend S3 bucket
+function corsMiddleware(req, res, next) {
+  const allowedOrigins = [
+    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com",
+  ];
+
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Credentials", true);
+
+  next();
+}
 
 app.get("/api/todos", async (req, res) => {
   try {
