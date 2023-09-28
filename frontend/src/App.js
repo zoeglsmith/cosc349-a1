@@ -7,7 +7,7 @@ function App() {
   const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
   const apiUrl =
-    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com/api/todos";
+    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com";
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
     if (storedTodos) {
@@ -28,7 +28,7 @@ function App() {
 
   const fetchTodos = async () => {
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch(`${apiUrl}/api/todos`);
       if (response.ok) {
         const todosData = await response.json();
         setTodos(todosData);
@@ -71,7 +71,7 @@ function App() {
 
   const handleDeleteToDo = async (id, text) => {
     try {
-      const response = await fetch(`${apiUrl}/${id}`, {
+      const response = await fetch(`${apiUrl}/api/todos/${id}`, {
         method: "DELETE",
       });
 
@@ -94,7 +94,7 @@ function App() {
   const handleSaveEdit = async (id) => {
     if (editedText.trim() !== "") {
       try {
-        const response = await fetch(`${apiUrl}/${id}`, {
+        const response = await fetch(`${apiUrl}/api/todos/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -122,7 +122,7 @@ function App() {
     try {
       console.log("Toggling completion for task with ID:", id);
 
-      const response = await fetch(`${apiUrl}/${id}`, {
+      const response = await fetch(`${apiUrl}/api/todos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
