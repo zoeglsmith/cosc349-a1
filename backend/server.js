@@ -42,6 +42,7 @@ function corsMiddleware(req, res, next) {
 
   next();
 }
+app.use(cors(corsOptions));
 
 app.get("/api/todos", async (req, res) => {
   try {
