@@ -53,6 +53,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.get("/api/todos", async (req, res) => {
+  console.log("Received GET request to /api/todos");
   try {
     const todos = await todosCollection.find({}).toArray();
     res.json(todos);
@@ -63,6 +64,7 @@ app.get("/api/todos", async (req, res) => {
 });
 
 app.post("/api/todos", async (req, res) => {
+  console.log("Received GET request to /api/todos");
   const { text, completed } = req.body;
   const newTodo = {
     text,
@@ -80,6 +82,7 @@ app.post("/api/todos", async (req, res) => {
 });
 
 app.put("/api/todos/:id", async (req, res) => {
+  console.log("Received GET request to /api/todos");
   const { id } = req.params;
   const { text, completed } = req.body;
 
@@ -104,6 +107,7 @@ app.put("/api/todos/:id", async (req, res) => {
 });
 
 app.delete("/api/todos/:id", async (req, res) => {
+  console.log("Received GET request to /api/todos");
   const todoId = req.params.id;
 
   try {

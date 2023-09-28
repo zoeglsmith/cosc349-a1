@@ -8,6 +8,7 @@ function App() {
   const [editedText, setEditedText] = useState("");
   const apiUrl =
     "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com";
+
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
     if (storedTodos) {
@@ -27,6 +28,7 @@ function App() {
   }, []);
 
   const fetchTodos = async () => {
+    console.log("Fetching todos...");
     try {
       const response = await fetch(`${apiUrl}/api/todos`);
       if (response.ok) {
@@ -48,6 +50,7 @@ function App() {
   const handleAddTodo = async () => {
     if (newTodo.trim() !== "") {
       try {
+        console.log("Adding new todo:", newTodo);
         const response = await fetch(`${apiUrl}/api/todos`, {
           method: "POST",
           headers: {
@@ -58,6 +61,7 @@ function App() {
 
         if (response.ok) {
           const newTodoData = await response.json();
+          console.log("Added new todo:", newTodoData);
           setTodos([...todos, newTodoData]);
           setNewTodo("");
         } else {
