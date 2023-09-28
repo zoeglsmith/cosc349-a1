@@ -49,18 +49,18 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 204,
 };
-// Temporary CORS middleware for testing (not for production)
-function tempDisableCors(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "*");
-  next();
-}
+// // Temporary CORS middleware for testing (not for production)
+// function tempDisableCors(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "*");
+//   res.header("Access-Control-Allow-Headers", "*");
+//   next();
+// }
 
-// Apply the temporary CORS middleware to your routes for testing
-app.use(tempDisableCors);
+// // Apply the temporary CORS middleware to your routes for testing
+// app.use(tempDisableCors);
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.get("/api/todos", async (req, res) => {
   console.log("Received GET request to /api/todos");
