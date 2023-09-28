@@ -74,7 +74,7 @@ app.use(cors(corsOptions));
 // });
 
 // Create a test route for POST requests
-app.post("/test-post", (req, res) => {
+app.post("/", (req, res) => {
   res.json({ message: "Test POST request successful" });
 });
 
