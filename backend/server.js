@@ -42,6 +42,14 @@ function corsMiddleware(req, res, next) {
 
   next();
 }
+
+const corsOptions = {
+  origin: "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
 app.use(cors(corsOptions));
 
 app.get("/api/todos", async (req, res) => {
