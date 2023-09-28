@@ -49,8 +49,18 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 204,
 };
+// Temporary CORS middleware for testing (not for production)
+function tempDisableCors(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+}
 
-app.use(cors(corsOptions));
+// Apply the temporary CORS middleware to your routes for testing
+app.use(tempDisableCors);
+
+// app.use(cors(corsOptions));
 
 app.get("/api/todos", async (req, res) => {
   console.log("Received GET request to /api/todos");
@@ -61,6 +71,11 @@ app.get("/api/todos", async (req, res) => {
     console.error("Error retrieving todos:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+// Create a test route for POST requests
+app.post("/test-post", (req, res) => {
+  res.json({ message: "Test POST request successful" });
 });
 
 app.post("/api/todos", async (req, res) => {

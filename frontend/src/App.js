@@ -6,8 +6,9 @@ function App() {
   const [newTodo, setNewTodo] = useState("");
   const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
-  const apiUrl =
-    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com";
+  // const apiUrl =
+  //   "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com";
+  const apiUrl = "http://cosc349-a1-backend-url/test-post"; // Use the test route URL
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
@@ -30,7 +31,9 @@ function App() {
   const fetchTodos = async () => {
     console.log("Fetching todos...");
     try {
-      const response = await fetch(`${apiUrl}/api/todos`);
+      // const response = await fetch(`${apiUrl}/api/todos`);
+      const response = await fetch(`${apiUrl}`);
+
       if (response.ok) {
         const todosData = await response.json();
         setTodos(todosData);
