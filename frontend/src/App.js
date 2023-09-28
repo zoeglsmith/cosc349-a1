@@ -6,8 +6,7 @@ function App() {
   const [newTodo, setNewTodo] = useState("");
   const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
-  const apiUrl = "http://ec2-54-165-155-49.compute-1.amazonaws.com:5000/api";
-
+  const apiUrl = "http://54.208.14.165:5000/api"; 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
     if (storedTodos) {
