@@ -8,7 +8,7 @@ function App() {
   const [editedText, setEditedText] = useState("");
   // const apiUrl =
   //   "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com";
-  const apiUrl = "http://cosc349-a1-backend-url/test-post"; // Use the test route URL
+  // const apiUrl = "http://cosc349-a1-backend-url/test-post"; // Use the test route URL
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
@@ -32,7 +32,7 @@ function App() {
     console.log("Fetching todos...");
     try {
       // const response = await fetch(`${apiUrl}/api/todos`);
-      const response = await fetch(`${apiUrl}`);
+      const response = await fetch("/test-post");
 
       if (response.ok) {
         const todosData = await response.json();
