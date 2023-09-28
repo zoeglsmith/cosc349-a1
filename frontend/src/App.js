@@ -6,8 +6,7 @@ function App() {
   const [newTodo, setNewTodo] = useState("");
   const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
-  const apiUrl =
-    "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com";
+  const apiUrl = "http://localhost:5000";
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
