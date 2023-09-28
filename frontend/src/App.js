@@ -54,7 +54,8 @@ function App() {
     if (newTodo.trim() !== "") {
       try {
         console.log("Adding new todo:", newTodo);
-        const response = await fetch(`${apiUrl}/api/todos`, {
+        const response = await fetch(`${apiUrl}`, {
+          // const response = await fetch(`${apiUrl}/api/todos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
