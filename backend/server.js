@@ -1,5 +1,4 @@
-const backendIP = "54.208.14.165"; // Add the backend IP address here
-
+const backendIP = "ec2-3-211-24-87.compute-1.amazonaws.com";
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
@@ -30,7 +29,7 @@ let todosCollection;
 function corsMiddleware(req, res, next) {
   const allowedOrigins = [
     "http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com",
-    `http://${backendIP}`, // Update to use the backend IP address
+    `http://${backendIP}:5000`,
   ];
 
   const origin = req.headers.origin;
@@ -136,6 +135,6 @@ const port = process.env.PORT || 5000;
 // app.listen(port, () => {
 //   console.log(`Server is running on http://localhost:${port}`);
 // });
-app.listen(port, "54.208.14.165", () => {
-  console.log(`Server is running on http://54.208.14.165:${port}`);
+app.listen(5000, backendIP, () => {
+  console.log(`Server is running on ${backendIP}:5000`);
 });
