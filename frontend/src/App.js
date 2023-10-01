@@ -6,50 +6,30 @@ function App() {
   const [newTodo, setNewTodo] = useState("");
   const [editing, setEditing] = useState(null);
   const [editedText, setEditedText] = useState("");
-  const apiUrl = "http://ec2-3-211-24-87.compute-1.amazonaws.com:5000";
-  useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem("todos"));
-    if (storedTodos) {
-      setTodos(storedTodos);
-    }
-  }, []);
+  const apiUrl =
+    "http://ec2-3-211-24-87.compute-1.amazonaws.com:5000/api/todos";
 
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
-
-  useEffect(() => {
-    const storedEditedText = localStorage.getItem("editedText");
-    if (storedEditedText) {
-      setEditedText(storedEditedText);
-    }
-  }, []);
-
-  const fetchTodos = async () => {
-    console.log("Fetching todos...");
-    try {
-      const response = await fetch(`${apiUrl}/api/todos`);
-      if (response.ok) {
-        const todosData = await response.json();
-        setTodos(todosData);
-        // setLoading(false); // Data has arrived, set loading to false
-      } else {
-        console.error("Error fetching todos");
+    const fetchTodos = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (response.ok) {
+          const todosData = await response.json();
+          setTodos(todosData);
+        } else {
+          console.error("Error fetching todos");
+        }
+      } catch (error) {
+        console.error("Error fetching todos:", error);
       }
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    }
-  };
-
-  useEffect(() => {
+    };
     fetchTodos();
   }, []);
 
   const handleAddTodo = async () => {
     if (newTodo.trim() !== "") {
       try {
-        console.log("Adding new todo:", newTodo);
-        const response = await fetch(`${apiUrl}/api/todos`, {
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +39,6 @@ function App() {
 
         if (response.ok) {
           const newTodoData = await response.json();
-          console.log("Added new todo:", newTodoData);
           setTodos([...todos, newTodoData]);
           setNewTodo("");
         } else {
@@ -71,14 +50,14 @@ function App() {
     }
   };
 
-  const handleDeleteToDo = async (id, text) => {
+  const handleDeleteToDo = async (todoId) => {
     try {
-      const response = await fetch(`${apiUrl}/api/todos/${id}`, {
+      const response = await fetch(`${apiUrl}/${todoId}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
-        const updatedTodos = todos.filter((todo) => todo._id !== id);
+        const updatedTodos = todos.filter((todo) => todo.todoId !== todoId);
         setTodos(updatedTodos);
       } else {
         console.error("Error deleting todo");
@@ -88,15 +67,15 @@ function App() {
     }
   };
 
-  const handleEditToDo = (id, text) => {
-    setEditing(id);
+  const handleEditToDo = (todoId, text) => {
+    setEditing(todoId);
     setEditedText(text);
   };
 
-  const handleSaveEdit = async (id) => {
+  const handleSaveEdit = async (todoId) => {
     if (editedText.trim() !== "") {
       try {
-        const response = await fetch(`${apiUrl}/api/todos/${id}`, {
+        const response = await fetch(`${apiUrl}/${todoId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -106,11 +85,11 @@ function App() {
 
         if (response.ok) {
           const updatedTodos = todos.map((todo) =>
-            todo._id === id ? { ...todo, text: editedText } : todo
+            todo.todoId === todoId ? { ...todo, text: editedText } : todo
           );
           setTodos(updatedTodos);
           setEditing(null);
-          localStorage.removeItem("editedText"); // Clear edited text from local storage
+          setEditedText("");
         } else {
           console.error("Error editing todo");
         }
@@ -119,12 +98,9 @@ function App() {
       }
     }
   };
-
-  const handleToggleComplete = async (id, completed) => {
+  const handleToggleComplete = async (todoId, completed) => {
     try {
-      console.log("Toggling completion for task with ID:", id);
-
-      const response = await fetch(`${apiUrl}/api/todos/${id}`, {
+      const response = await fetch(`${apiUrl}/${todoId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -133,13 +109,9 @@ function App() {
       });
 
       if (response.ok) {
-        console.log("API response for toggling completion:", response);
-
         const updatedTodos = todos.map((todo) =>
-          todo._id === id ? { ...todo, completed } : todo
+          todo.todoId === todoId ? { ...todo, completed } : todo
         );
-        console.log("Updated todos array:", updatedTodos);
-
         setTodos(updatedTodos);
       } else {
         console.error("Error updating todo status");
@@ -159,7 +131,6 @@ function App() {
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add a new To Do"
           className="input-field"
-          id="Add"
         />
         <button onClick={handleAddTodo} className="add-button">
           Add
@@ -169,15 +140,17 @@ function App() {
       <ul className="todo-list">
         {todos.map((todo) => (
           <li
-            key={todo._id}
+            key={todo.todoId}
             className={`todo-item ${todo.completed ? "completed" : ""}`}
           >
             <input
               type="checkbox"
               checked={todo.completed}
-              onChange={() => handleToggleComplete(todo._id, !todo.completed)}
+              onChange={() =>
+                handleToggleComplete(todo.todoId, !todo.completed)
+              }
             />
-            {editing === todo._id ? (
+            {editing === todo.todoId ? (
               <>
                 <input
                   type="text"
@@ -185,7 +158,7 @@ function App() {
                   onChange={(e) => setEditedText(e.target.value)}
                 />
                 <button
-                  onClick={() => handleSaveEdit(todo._id)}
+                  onClick={() => handleSaveEdit(todo.todoId)}
                   className="edit-button"
                 >
                   Save
@@ -196,13 +169,13 @@ function App() {
                 {todo.text}
                 <button
                   className="delete-button"
-                  onClick={() => handleDeleteToDo(todo._id, todo.text)}
+                  onClick={() => handleDeleteToDo(todo.todoId)}
                 >
                   Delete
                 </button>
                 <button
                   className="edit-button"
-                  onClick={() => handleEditToDo(todo._id, todo.text)}
+                  onClick={() => handleEditToDo(todo.todoId, todo.text)}
                 >
                   Edit
                 </button>
