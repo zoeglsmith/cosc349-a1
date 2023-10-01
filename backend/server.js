@@ -4,15 +4,14 @@ const mysql = require("mysql2");
 const cors = require("cors");
 require("dotenv").config();
 
-// Create a MySQL connection pool with your RDS instance details
 const pool = mysql.createPool({
-  host: "todo1.cidtudnu7k64.us-east-1.rds.amazonaws.com",
-  user: "admin",
-  password: "admin123",
-  database: "todo1",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  waitForConnections: process.env.DB_WAIT_FOR_CONNECTIONS === "true",
+  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT),
+  queueLimit: parseInt(process.env.DB_QUEUE_LIMIT),
 });
 
 app.use(express.json());
