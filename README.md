@@ -86,6 +86,6 @@ Follwing, enter the database password which is provided above
 To access relvent database perform this command:
 ````
 Use todos1
-``
+``````
 
 This will give you access to the application database where the users data is stored, you can perform any needd database tasks from herex
