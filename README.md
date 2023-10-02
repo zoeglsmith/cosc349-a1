@@ -11,17 +11,50 @@ Before you begin, ensure you have the following software installed on your syste
 - **Node.js**: Download and install Node.js from the official website. Ensure you have at least version 14.17.0 installed.
 
 - **MySQL Database**: version 15
+  
+- **AWS credentials**
+
 ## Application URLs
 
+  
 - **Frontend**: [To-Do App](http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com)
-- **Backend SSH**: `ssh -i cosc349.pem ubuntu@3.211.24.87`
 
-## Git access
+To get access to the frontend source code, please clone the rpeo below:
 
 To clone the source code of the frontend and backend please perform this command;
 
 ``
 git clone https://github.com/zoeglsmith/cosc349-a1.git
+``
+
+``
+cd frontend
+``
+
+``
+npm start
+``
+
+- **Backend acess via Git repo**:Clone repo
+  
+``
+cd backend
+``
+
+``
+npm start
+``
+  
+
+
+- **Backend acess via SSH**: `ssh -i cosc349.pem ubuntu@3.211.24.87`
+
+``
+npm i
+``
+
+``
+node server.js
 ``
 
 ## Software Components and Downloads
@@ -62,6 +95,12 @@ To use the To-Do application frontend, visit the provided [URL](http://cosc349-a
 ### Backend
 
 The backend of our application is powered by Node.js and Express.js. To run the backend, you need to access the AWS instance using SSH:
+
+- You must have the cosc349a2.pem file within the same folder as where the repo  is stored in
+-  **e.g Folder structure**
+-  -/COSC349
+   -  cosc349a2.pem
+   -  /cosc349-a1(repo)
 
 ```bash
 ssh -i cosc349.pem ubuntu@3.211.24.87
