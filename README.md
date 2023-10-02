@@ -16,6 +16,14 @@ Before you begin, ensure you have the following software installed on your syste
 - **Frontend**: [To-Do App](http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com)
 - **Backend SSH**: `ssh -i cosc349.pem ubuntu@3.211.24.87`
 
+## Git access
+
+To clone the source code of the frontend and backend please perform this command;
+
+``
+git clone https://github.com/zoeglsmith/cosc349-a1.git
+``
+
 ## Software Components and Downloads
 
 The application is built using the following software components:
