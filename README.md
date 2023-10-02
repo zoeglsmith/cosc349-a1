@@ -1,49 +1,83 @@
-## Software Components and Downloads
-By Zoe Smith-COSC349
+# Running the To-Do List Application
 
-This file provides an overview of the software components used in my To-Do List project and their  download sources, versions, and approximate download volumes.
+*By Zoe Smith - 2nd October 2023*
+
+This documentation provides step-by-step instructions for new developers to set up and run the To-Do List application on their local development environment.
+
+## Prerequisites
+
+Before you begin, ensure you have the following software installed on your system:
+
+- **Node.js**: Download and install Node.js from the official website. Ensure you have at least version 14.17.0 installed.
+
+- **MySQL Database**: version 15
+## Application URLs
+
+- **Frontend**: [To-Do App](http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com)
+- **Backend SSH**: `ssh -i cosc349.pem ubuntu@3.211.24.87`
+
+## Software Components and Downloads
+
+The application is built using the following software components:
 
 ### Frontend
 
-The frontend of the application is built using the React framework. To set up the frontend, the following components are downloaded:
-
-- **React Framework**: The core library for building user interfaces with components. It can be downloaded from the official website or via Node Package Manager (NPM).
-  - Source: [React Official Website](https://reactjs.org/)
-  - Version: 18.2.0
-  - Approximate Download Size: X MB
+- **React Framework**
+  - **Source:** [React Official Website](https://reactjs.org/)
+  - **Version:** 18.2.0
 
 ### Backend
 
-The backend of the application is powered by Node.js and relies on various packages for its functionality. The following components are downloaded:
+- **Node.js**
+  - **Source:** [Node.js Official Website](https://nodejs.org/)
+  - **Version:** 14.17.0
+- **Express.js**
+  - **Source:** [Express.js Official Website](https://expressjs.com/)
+  - **Version:** 4.18.2
 
-- **Node.js**: A runtime environment that enables executing JavaScript code server-side. It can be downloaded from the official website or via package managers like NPM.
-  - Source: [Node.js Official Website](https://nodejs.org/)
-  - Version: 14.17.0
-  - Approximate Download Size: X MB
+### Database (MySQL)
 
-- **Express.js**: A popular web application framework for Node.js. It is used to create APIs and handle HTTP requests.
-  - Source: [Express.js Official Website](https://expressjs.com/)
-  - Version: 4.18.2
-  - Approximate Download Size: X MB
+- **MySQL Database**
+  - **Source:** Provided as part of the AWS RDS (Amazon Relational Database Service)
+  - **Credentials:**
+    - **Host:** `todo1.cidtudnu7k64.us-east-1.rds.amazonaws.com`
+    - **User:** `admin`
+    - **Password:** `admin123`
+    - **Database:** `todo1`
 
-### Database (MongoDB)
+## Running the Application
 
-The database used in my To-Do List project is MongoDB, a NoSQL database. The image for MongoDB is pulled from Docker Hub and includes the necessary components for running MongoDB.
+### Frontend
 
-- **MongoDB Image**: The official MongoDB image available on Docker Hub.
-  - Source: [MongoDB Docker Hub](https://hub.docker.com/_/mongo)
-  - Version: Latest
-  - Approximate Download Size: W MB
+To use the To-Do application frontend, visit the provided [URL](http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com). You can create, view, edit, and delete tasks through the user-friendly interface.
 
-### Nginx Web Server
+### Backend
 
-Nginx serves as the web server, directing traffic and enabling communication between different services. It is used to communicate frontend and backend
+The backend of our application is powered by Node.js and Express.js. To run the backend, you need to access the AWS instance using SSH:
 
-- **Nginx Image**: The official Nginx image available on Docker Hub.
-  - Source: [Nginx Docker Hub](https://hub.docker.com/_/nginx)
-  - Version: Latest
-  - Approximate Download Size: P MB
+```bash
+ssh -i cosc349.pem ubuntu@3.211.24.87
+````
+Once Logged in, perform this command
 
-PS: the provided download sizes are approximate and can vary based on factors such as versions and configurations.
+``````
+cd backend
+npm install
+node server.js
+``````
 
-For comprehensive installation instructions and additional information about these software components, please refer to their official websites.
+To access the MYSQL database RDS instance via terminal perform this command:
+
+````
+mysql -u admin -p -h todo1.cidtudnu7k64.us-east-1.rds.amazonaws.com -P 3306
+
+````
+
+Follwing, enter the database password which is provided above
+
+To access relvent database perform this command:
+````
+Use todos1
+``
+
+This will give you access to the application database where the users data is stored, you can perform any needd database tasks from herex
