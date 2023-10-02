@@ -92,9 +92,12 @@ The application is built using the following software components:
 
 To use the To-Do application frontend, visit the provided [URL](http://cosc349-a1-frontend.s3-website-us-east-1.amazonaws.com). You can create, view, edit, and delete tasks through the user-friendly interface.
 
+- Frontend is run on a AWS S3 bucket thta provides a static URL for public access
 ### Backend
 
-The backend of our application is powered by Node.js and Express.js. To run the backend, you need to access the AWS instance using SSH:
+The backend of our application is powered by Node.js and Express.js. To run the backend, you need to access the AWS instance using SSH as it is run by a EC2 instance. Running this also starts up communication to the database so no need to start the database insatnce either.
+
+- Within this instance, the npackage.json is included so no need to manually insall each depedency
 
 - You must have the cosc349a2.pem file within the same folder as where the repo  is stored in
 -  **e.g Folder structure**
@@ -113,7 +116,7 @@ npm install
 node server.js
 ``````
 
-To access the MYSQL database RDS instance via terminal perform this command:
+To access the MYSQL database RDS instance via EC2 instance on terminal perform this command:
 
 ````
 mysql -u admin -p -h todo1.cidtudnu7k64.us-east-1.rds.amazonaws.com -P 3306
